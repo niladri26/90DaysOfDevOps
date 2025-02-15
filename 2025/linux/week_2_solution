@@ -1,0 +1,21 @@
+#1. User & Group Management :
+commands are below :
+sudo useradd devops_user
+sudo groupadd devops_team
+sudo passwd devops_user
+sudo gpasswd -M devops_user devops_team
+
+
+
+#2. File and directory permission
+touch project_notes.txt
+chmod 240 project_notes.txt
+ls -l
+
+
+#3. Log file analysis with awk, grep, sed
+vim app.log
+grep -i "error" app.log
+awk '/error/ {print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12}' app.log
+sed "s/rhost/ip/g" securityCopy.txt | uniq
+
