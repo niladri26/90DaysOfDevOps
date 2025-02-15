@@ -10,18 +10,75 @@ task02: Additionally, the script should implement a rotation mechanism to keep o
 
 info
 
-# task01
+
+# task 01
+
+function display_usage {
+
+        echo "usage: ./automated_backup.sh <source path> <destination path>"
+
+}
+
+
+if [ $# -eq 0 ]; then
+
+        display_usage
+
+fi
+
+
 
 src=$1
 dest=$2
+timestamp=$(date '+%Y-%m-%d-%H-%M-%S')
 
-timestamp=$(date '+%Y-%m-%d-%H-%M')
+function create_backup {
+
+        zip -r "${dest}/backup_${timestamp}.zip" "${src}" > /dev/null
+
+        if [ $? -eq 0 ]; then
+
+                echo "backup generated successfully for ${timestamp}"
+
+        fi
+
+}
 
 
-zip -r "$dest/backup-$timestamp.zip" $src > /dev/null
+# task 02
+
+function perform_rotation {
+
+        backups=($(ls -t "${dest}/backup_"*.zip 2> /dev/null))
+        #echo "${backups[@]}"
 
 
-echo "======= backup done ======="
+        if [ "${#backups[@]}" -gt 3 ]; then
+                echo "Performing latest three backups."
+
+                backups_to_remove=("${backups[@]:3}")
+
+                #echo "${backups_to_remove[@]}"
+
+
+                for backup in "${backups_to_remove[@]}";
+                do
+
+                        rm -f ${backup}
+
+                done
+        fi
+
+}
+
+
+create_backup
+
+perform_rotation
+
+
+
+
 
 
 
